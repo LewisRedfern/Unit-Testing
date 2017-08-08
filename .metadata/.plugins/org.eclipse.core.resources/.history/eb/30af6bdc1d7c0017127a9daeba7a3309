@@ -1,0 +1,68 @@
+import static org.junit.Assert.*;
+
+import org.junit.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class TestOne {
+
+	private WebDriver wd;
+
+	@Before
+	public void driver() {
+		wd = new ChromeDriver();
+	}
+
+	@Test
+	public void test() {
+		
+		wd.manage().window().maximize();
+		wd.navigate().to("http://thedemosite.co.uk/");
+		
+		CreateUser();
+		
+		EnterUser();
+		
+		CheckLog();
+	}
+	
+	public void CreateUser () {
+		
+		WebElement createUser = wd.findElement(By.xpath("/html/body/div/center/table/tbody/tr[2]/td/div/center/table/tbody/tr/td[2]/p/small/a[3]"));
+		createUser.click();
+		WebElement newUser = wd.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/div/center/table/tbody/tr[1]/td[2]/p/input"));
+		newUser.sendKeys("lewtest");
+		WebElement newPass = wd.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/div/center/table/tbody/tr[2]/td[2]/p/input"));
+		newPass.click();
+		newPass.sendKeys("lewtest");
+		WebElement save = wd.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/div/center/table/tbody/tr[3]/td[2]/p/input"));
+		save.click();
+	}
+	
+	public void EnterUser () {
+		
+		WebElement login = wd.findElement(By.xpath("/html/body/div/center/table/tbody/tr[2]/td/div/center/table/tbody/tr/td[2]/p/small/a[4]"));
+		login.click();
+		WebElement user = wd.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/table/tbody/tr[1]/td[2]/p/input"));
+		user.click();
+		user.sendKeys("lewtest");
+		WebElement password = wd.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/p/input"));
+		password.click();
+		password.sendKeys("lewtest");
+		WebElement button = wd.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/table/tbody/tr[3]/td[2]/p/input"));
+		button.click();
+	}
+	
+	public void CheckLog () {
+		
+		WebElement text = wd.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/big/blockquote/blockquote/font/center/b"));
+		assertEquals("not succesful", "**Successful Login**", text.getText());
+	}
+	
+	@After
+	public void after() {
+		wd.quit();
+	}
+}
