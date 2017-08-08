@@ -35,13 +35,6 @@
     <scope>test</scope>
 </dependency>
   
- <!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
-<dependency>
-    <groupId>com.aventstack</groupId>
-    <artifactId>extentreports</artifactId>
-    <version>3.0.6</version>
-</dependency>
- 
   
   </dependencies>
   
