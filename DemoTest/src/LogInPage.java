@@ -1,0 +1,40 @@
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
+public class LogInPage {
+
+	@FindBy(xpath = "//a[@href=\"login.php\"]")
+	private WebElement logUser;
+	
+	@FindBy(xpath = "//input[@name=\"username\"]")
+	private WebElement User;
+	
+	@FindBy(xpath = "//input[@name=\"password\"]")
+	private WebElement Pass;
+	
+	@FindBy(xpath = "//input[@name=\"FormsButton2\"]")
+	private WebElement logBut;
+	
+	public void ClickCreate () {
+		logUser.click();
+	}
+	
+	public void InputUser (String user) {
+		User.sendKeys(user);
+	}
+	
+	public void InputPass (String pass) {
+		Pass.sendKeys(pass);
+	}
+	
+	public void ClickSave () {
+		logBut.click();
+	}
+	
+	public void DoLogIn (String u, String p){
+		ClickCreate();
+		InputUser(u);
+		InputPass(p);
+		ClickSave();
+	}
+}
