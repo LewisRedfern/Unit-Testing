@@ -23,7 +23,6 @@ public class TestOne {
 
 	@Before
 	public void driver() {
-		
 		wd = new ChromeDriver();
 		createUser = PageFactory.initElements(wd, CreateUser.class);
 		logInPage = PageFactory.initElements(wd, LogInPage.class);
@@ -61,4 +60,5 @@ public class TestOne {
 	public void after() {
 		wd.quit();
 	}
+
 }

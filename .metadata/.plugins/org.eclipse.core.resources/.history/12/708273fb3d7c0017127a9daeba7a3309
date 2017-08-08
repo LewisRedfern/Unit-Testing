@@ -1,8 +1,8 @@
 import static org.junit.Assert.*;
 
 import java.util.NoSuchElementException;
-import java.util.function.Function;
 
+import org.apache.xpath.functions.Function;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,25 +11,23 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
-import java.util.concurrent.TimeUnit;
 
 public class TestOne {
+
+	Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+	.withTimeout(30, SECONDS).pollingEvery(5, SECONDS)
+	.ignoring(NoSuchElementException.class);
+	WebElement foo = wait.until(new Function<WebDriver, WebElement>());
 
 	private WebDriver wd;
 	private CreateUser createUser;
 	private LogInPage logInPage;
 
-	Wait<WebDriver> wait;
-
 	@Before
 	public void driver() {
-		
 		wd = new ChromeDriver();
 		createUser = PageFactory.initElements(wd, CreateUser.class);
 		logInPage = PageFactory.initElements(wd, LogInPage.class);
-
-		wait = new FluentWait<WebDriver>(wd).withTimeout(30, TimeUnit.SECONDS).pollingEvery(5, TimeUnit.SECONDS)
-				.ignoring(NoSuchElementException.class);
 	}
 
 	@Test
@@ -41,20 +39,13 @@ public class TestOne {
 		createUser.DoCreate("lewtest", "lewtest");
 		logInPage.DoLogIn("lewtest", "lewtest");
 
-		WebElement text = CheckLog();
-		assertEquals("not succesful", "**Successful Login**", text.getText());
+		CheckLog();
 	}
 
-	public WebElement CheckLog() {
+	public void CheckLog() {
 
-		return wait.until(new Function<WebDriver, WebElement>() {
-
-			public WebElement apply(WebDriver driver) {
-
-				WebElement text = wd.findElement(By.xpath("//blockquote/blockquote/font/center/b"));
-				return text;
-			}
-		});
+		WebElement text = wd.findElement(By.xpath("//blockquote/blockquote/font/center/b"));
+		assertEquals("not succesful", "**Successful Login**", text.getText());
 	}
 
 	@After

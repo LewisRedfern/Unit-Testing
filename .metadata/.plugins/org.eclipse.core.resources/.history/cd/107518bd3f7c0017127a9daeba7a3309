@@ -14,22 +14,21 @@ import org.openqa.selenium.support.ui.Wait;
 import java.util.concurrent.TimeUnit;
 
 public class TestOne {
-
+	
 	private WebDriver wd;
 	private CreateUser createUser;
 	private LogInPage logInPage;
 
-	Wait<WebDriver> wait;
+	Wait<WebDriver> wait = new FluentWait<WebDriver>(wd)
+			.withTimeout(30, TimeUnit.SECONDS).pollingEvery(5, TimeUnit.SECONDS)
+			.ignoring(NoSuchElementException.class);
 
+	
 	@Before
 	public void driver() {
-		
 		wd = new ChromeDriver();
 		createUser = PageFactory.initElements(wd, CreateUser.class);
 		logInPage = PageFactory.initElements(wd, LogInPage.class);
-
-		wait = new FluentWait<WebDriver>(wd).withTimeout(30, TimeUnit.SECONDS).pollingEvery(5, TimeUnit.SECONDS)
-				.ignoring(NoSuchElementException.class);
 	}
 
 	@Test
@@ -46,19 +45,19 @@ public class TestOne {
 	}
 
 	public WebElement CheckLog() {
+	
+	return wait.until(new Function<WebDriver, WebElement>() {
 
-		return wait.until(new Function<WebDriver, WebElement>() {
+		public WebElement apply(WebDriver driver) {
 
-			public WebElement apply(WebDriver driver) {
-
-				WebElement text = wd.findElement(By.xpath("//blockquote/blockquote/font/center/b"));
-				return text;
-			}
-		});
+			WebElement text = wd.findElement(By.xpath("//blockquote/blockquote/font/center/b"));
+			return text;	
+		}});
 	}
 
 	@After
 	public void after() {
 		wd.quit();
 	}
+
 }
