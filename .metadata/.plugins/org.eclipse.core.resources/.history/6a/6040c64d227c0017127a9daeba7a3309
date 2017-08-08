@@ -55,7 +55,7 @@ public class TestOne {
 	
 	public void CheckLog() {
 		
-		WebElement text = wd.findElement(By.xpath("//blockquote/blockquote/font/center/b"));
+		WebElement text = wd.findElement(By.xpath("//b[text()=\"**Successful Login**\"]"));
 		assertEquals("not succesful", "**Successful Login**", text.getText());
 	}
 	
