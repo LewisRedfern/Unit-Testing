@@ -23,7 +23,8 @@ public class TestOne {
 		
 		CreateUser();
 		EnterUser();
-		CheckLog();
+		WebElement text = wd.findElement(By.xpath("//b[text()=\"**No login attempted**\"]"));
+		assertEquals("not succesful", "**Successful Login**", text.getText());
 	}
 	
 	public void CreateUser() {
@@ -53,11 +54,6 @@ public class TestOne {
 		button.click();
 	}
 	
-	public void CheckLog() {
-		
-		WebElement text = wd.findElement(By.xpath("//b[text()=\"**Successful Login**\"]"));
-		assertEquals("not succesful", "**Successful Login**", text.getText());
-	}
 	
 	@After
 	public void after() {

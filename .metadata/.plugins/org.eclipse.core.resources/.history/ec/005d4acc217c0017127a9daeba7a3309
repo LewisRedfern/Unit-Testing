@@ -23,7 +23,6 @@ public class TestOne {
 		
 		CreateUser();
 		EnterUser();
-		CheckLog();
 	}
 	
 	public void CreateUser() {
@@ -50,14 +49,11 @@ public class TestOne {
 		password.click();
 		password.sendKeys("lewtest");
 		WebElement button = wd.findElement(By.xpath("//input[@name=\"FormsButton2\"]"));
+		WebElement text = wd.findElement(By.xpath("//b[text()=\"**No login attempted**\"]"));
 		button.click();
-	}
-	
-	public void CheckLog() {
-		
-		WebElement text = wd.findElement(By.xpath("//b[text()=\"**Successful Login**\"]"));
 		assertEquals("not succesful", "**Successful Login**", text.getText());
 	}
+	
 	
 	@After
 	public void after() {
