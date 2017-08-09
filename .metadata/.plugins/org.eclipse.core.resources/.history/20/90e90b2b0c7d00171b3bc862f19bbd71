@@ -1,0 +1,22 @@
+package utils;
+
+import org.junit.Test;
+import utils.ExcelReader;
+
+import java.util.List;
+
+public class ExcellCaller {
+
+	@Test
+    public void spreadSheet(){
+        ExcelReader sheetReader = new ExcelReader("excelEx.xlsx");
+        List<String> row = sheetReader.readRow(1, "Input Data");
+
+        for(String cell : row){
+            System.out.println(cell);
+        }
+
+
+    }
+
+}

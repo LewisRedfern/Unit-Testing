@@ -1,0 +1,127 @@
+import static org.junit.Assert.*;
+import java.util.NoSuchElementException;
+import java.util.function.Function;
+import org.junit.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+
+
+import org.junit.Before;
+import org.junit.Test;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import java.util.concurrent.TimeUnit;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TestOne {
+
+	private static List<String> row;
+	private String userDeet;
+	private String passDeet;
+	
+	private WebDriver wd;
+	private CreateUser createUser;
+	private LogInPage logInPage;
+	
+	private static ExtentReports report;
+    private ExtentTest test;
+    private ExtentTest test1;
+    private String reportFilePath = "report.html";
+
+	Wait<WebDriver> wait;
+
+	@Before
+	public void driver() {
+		
+		ExcelReader sheetReader = new ExcelReader("excelEx.xlsx");
+        row = sheetReader.readRow(1, "Input");
+        userDeet = row.get(3);
+        passDeet = row.get(4);
+        
+		
+		SetUp();
+		
+		wd = new ChromeDriver();
+		
+		createUser = PageFactory.initElements(wd, CreateUser.class);
+		logInPage = PageFactory.initElements(wd, LogInPage.class);
+
+		wait = new FluentWait<WebDriver>(wd).withTimeout(30, TimeUnit.SECONDS).pollingEvery(5, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+	}
+	
+	public void SetUp(){
+        report = new ExtentReports();
+        ExtentHtmlReporter extentHtmlReporter = new ExtentHtmlReporter(reportFilePath);
+        extentHtmlReporter.config().setReportName("TestReport");
+        extentHtmlReporter.config().setDocumentTitle("Report");
+        report.attachReporter(extentHtmlReporter);
+        test = report.createTest("TestName");
+        test1 = report.createTest("TestName1");
+    }
+
+	@Test
+	public void test() {
+
+		wd.manage().window().maximize();
+		wd.navigate().to("http://thedemosite.co.uk/");
+		test.log(Status.INFO,"Navigated to site.");
+
+		createUser.DoCreate(userDeet, passDeet);
+		test.log(Status.INFO,"Account created with unique details.");
+		
+		logInPage.DoLogIn(userDeet, passDeet);
+		test.log(Status.INFO,"Unique details added.");
+		
+
+		WebElement text = CheckLog();
+		
+		assertEquals("not succesful", "**Successful Login**", text.getText());
+		
+		if (text.getText().equals("**Successful Login**")) {
+			
+			test.pass("The system confrimed" + text.getText());
+		}		
+	}
+
+	public WebElement CheckLog() {
+
+		return wait.until(new Function<WebDriver, WebElement>() {
+
+			public WebElement apply(WebDriver driver) {
+
+				WebElement text = wd.findElement(By.xpath("//blockquote/blockquote/font/center/b"));
+				return text;
+			}
+		});
+	}
+
+	@After
+	public void after() {
+		wd.quit();
+		
+	}
+	
+	@AfterClass
+	public static void FlushTheReport() {
+		report.flush();
+	}
+}

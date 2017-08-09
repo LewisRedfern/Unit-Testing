@@ -1,0 +1,19 @@
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import org.junit.Before;
+import org.junit.Test;
+
+public class TestReport {
+
+    
+    @Before
+    
+
+    public void myTestMethod(String s){
+        test.log(Status.INFO,"Info level");
+        test.pass("hello");
+        report.flush();
+    }
+}
